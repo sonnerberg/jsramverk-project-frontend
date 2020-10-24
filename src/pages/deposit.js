@@ -1,29 +1,34 @@
-import { useMutation } from '@apollo/client'
+import { useApolloClient, useMutation } from '@apollo/client'
 import React, { useState } from 'react'
 import { DEPOSIT } from '../gql/mutation'
+import { CHECK_BALANCE } from '../gql/query'
 
-const Deposit = () => {
-  const [values, setValues] = useState()
+const Deposit = ({ history }) => {
+  const client = useApolloClient()
+
+  const [amount, setAmount] = useState('')
   const [deposit, { loading, error }] = useMutation(DEPOSIT, {
     onCompleted: (data) => {
-      console.log(data)
+      client.writeQuery({
+        query: CHECK_BALANCE,
+        data,
+      })
     },
   })
 
   const onChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: Number(event.target.value),
-    })
+    setAmount(Number(event.target.value))
   }
 
   const onSubmit = (event) => {
     event.preventDefault()
     deposit({
       variables: {
-        ...values,
+        amount,
       },
     })
+    setAmount('')
+    history.push('/account')
   }
 
   return (
@@ -31,11 +36,13 @@ const Deposit = () => {
       <form onSubmit={onSubmit}>
         <label htmlFor="amount">Amount:</label>
         <input
-          type="text"
+          type="number"
           name="amount"
           required="required"
           onChange={onChange}
           placeholder="amount"
+          value={amount}
+          min="1"
         />
         <button type="submit">Deposit</button>
       </form>

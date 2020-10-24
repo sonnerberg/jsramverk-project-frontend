@@ -17,3 +17,21 @@ export const DEPOSIT = gql`
     balance: addFunds(amount: $amount)
   }
 `
+
+export const BUY_STOCK = gql`
+  mutation buyStock($stock: String!, $amount: Float!) {
+    myStocks: buyStock(stock: $stock, amount: $amount) {
+      name
+      amount
+    }
+  }
+`
+
+export const SELL_STOCK = gql`
+  mutation sellStock($stock: String!, $amount: Float!) {
+    myStocks: sellStock(stock: $stock, amount: $amount) {
+      name
+      amount
+    }
+  }
+`
