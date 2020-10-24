@@ -40,10 +40,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     query: IS_LOGGED_IN,
   })
 
-  // if (loading) return <p>Loading...</p>
-
-  // if (error) return <p>Error!</p>
-
   return (
     <Route
       {...rest}

@@ -114,10 +114,6 @@ const Buy = ({ history }) => {
     }
   }
 
-  // if (loadingPurchase || loadingStocks) return <p>loading</p>
-
-  // if (errorPurchase || errorStocks) return <p>Error!</p>
-
   return (
     <>
       {loadingPurchase && <div>Loading...</div>}

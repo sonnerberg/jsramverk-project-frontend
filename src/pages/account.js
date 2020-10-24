@@ -4,7 +4,6 @@ import { STOCKS_AND_BALANCE } from '../gql/query'
 import { v4 as uuidv4 } from 'uuid'
 
 const Account = () => {
-  // const { data, loading, error } = useQuery(STOCKS_AND_BALANCE)
   const [getStocksAndBalance, { data, loading, error }] = useLazyQuery(
     STOCKS_AND_BALANCE
   )
