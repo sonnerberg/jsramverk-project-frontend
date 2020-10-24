@@ -1,5 +1,5 @@
 import { gql, useQuery } from '@apollo/client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 const GET_USERS = gql`
@@ -13,7 +13,11 @@ const GET_USERS = gql`
 `
 
 const Users = () => {
-  const { data, loading, error } = useQuery(GET_USERS)
+  const { data, loading, error, refetch } = useQuery(GET_USERS)
+
+  useEffect(() => {
+    refetch()
+  }, [refetch])
 
   if (loading)
     return (
@@ -32,6 +36,7 @@ const Users = () => {
   return (
     <>
       <div>This is where you can see statistics of registered users</div>
+      {data.users.length === 0 && <p>no users registered</p>}
       {data.users.map((user) => (
         <React.Fragment key={uuidv4()}>
           <div>

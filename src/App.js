@@ -1,24 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
 import GlobalStyle from './components/GlobalStyle'
 import './App.css'
 
 import Pages from './pages'
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
+import { gql, useSubscription } from '@apollo/client'
 
-const uri = process.env.REACT_APP_API_URI
-const cache = new InMemoryCache()
+export const STOCKS_UPDATED = gql`
+  subscription {
+    stocksUpdated {
+      id
+      name
+      rate
+      startingPoint
+      variance
+    }
+  }
+`
 
-const client = new ApolloClient({
-  uri,
-  cache,
-  connectToDevTools: true,
-})
-
-const App = () => (
-  <ApolloProvider client={client}>
-    <GlobalStyle />
-    <Pages />
-  </ApolloProvider>
-)
+const App = () => {
+  const [data, setData] = useState([])
+  useSubscription(STOCKS_UPDATED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      setData(subscriptionData)
+    },
+  })
+  return (
+    <>
+      <GlobalStyle />
+      <Pages data={data} />
+    </>
+  )
+}
 
 export default App

@@ -1,14 +1,17 @@
 import { gql } from '@apollo/client'
 
-const GET_USERS = gql`
-  query get_users {
-    users {
-      id
-      username
-      email
-      avatar
-    }
+export const IS_LOGGED_IN = gql`
+  query IsLoggedIn {
+    isLoggedIn
   }
 `
 
-export { GET_USERS }
+export const STOCKS_AND_BALANCE = gql`
+  query stocksAndBalance {
+    balance
+    myStocks {
+      name
+      amount
+    }
+  }
+`
