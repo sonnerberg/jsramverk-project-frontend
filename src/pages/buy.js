@@ -7,7 +7,7 @@ import {
 import { v4 as uuidv4 } from 'uuid'
 import React, { useEffect, useState } from 'react'
 import { BUY_STOCK } from '../gql/mutation'
-import { AVAILABLE_STOCKS, MY_STOCKS } from '../gql/query'
+import { AVAILABLE_STOCKS, MY_STOCKS, STOCKS_AND_BALANCE } from '../gql/query'
 
 const Buy = ({ history }) => {
   const client = useApolloClient()
@@ -42,6 +42,11 @@ const Buy = ({ history }) => {
           myStocks: updatedStocks,
         },
       })
+
+      history.push('/account')
+    },
+    onError: (err) => {
+      console.error(err.message)
     },
   })
 
@@ -58,6 +63,20 @@ const Buy = ({ history }) => {
       })
     },
   })
+
+  // Get stocks and balance in order to have it in the cache for
+  // when the purchase completes
+  const [getStocksAndBalance] = useLazyQuery(STOCKS_AND_BALANCE)
+
+  useEffect(() => {
+    let isMounted = true
+    if (isMounted) {
+      getStocksAndBalance()
+    }
+    return () => {
+      isMounted = false
+    }
+  }, [getStocksAndBalance])
 
   useEffect(() => {
     let isMounted = true
@@ -92,17 +111,17 @@ const Buy = ({ history }) => {
           amount,
         },
       })
-
-      history.push('/account')
     }
   }
 
-  if (loadingPurchase || loadingStocks) return <p>loading</p>
+  // if (loadingPurchase || loadingStocks) return <p>loading</p>
 
-  if (errorPurchase || errorStocks) return <p>Error!</p>
+  // if (errorPurchase || errorStocks) return <p>Error!</p>
 
   return (
     <>
+      {loadingPurchase && <div>Loading...</div>}
+      {loadingStocks && <div>Loading...</div>}
       <form onSubmit={onSubmit}>
         <label htmlFor="amount">Amount:</label>
         <input
@@ -113,6 +132,7 @@ const Buy = ({ history }) => {
           placeholder="amount"
           value={amount}
           min="1"
+          step="0.01"
         />
         <label htmlFor="stock">Stock:</label>
         <select
@@ -134,6 +154,8 @@ const Buy = ({ history }) => {
         </select>
         <button type="submit">Buy stock</button>
       </form>
+      {errorPurchase && <div>{errorPurchase.message}</div>}
+      {errorStocks && <div>{errorStocks.message}</div>}
     </>
   )
 }

@@ -19,13 +19,16 @@ const Login = ({ history }) => {
 
       history.push('/')
     },
+    onError: (error) => {
+      console.log(error.message)
+    },
   })
 
   return (
     <>
       <UserForm action={signIn} formType="login" />
       {loading && <p>Loading...</p>}
-      {error && <p>Error creating account!</p>}
+      {error && <p>Error signing in!</p>}
     </>
   )
 }
