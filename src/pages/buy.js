@@ -46,6 +46,7 @@ const Buy = ({ history }) => {
       history.push('/account')
     },
     onError: (err) => {
+      // TODO: Send to notify component
       console.error(err.message)
     },
   })
@@ -72,27 +73,15 @@ const Buy = ({ history }) => {
     let isMounted = true
     if (isMounted) {
       getStocksAndBalance()
-    }
-    return () => {
-      isMounted = false
-    }
-  }, [getStocksAndBalance])
-
-  useEffect(() => {
-    let isMounted = true
-    if (isMounted) {
       stocksAvailable()
+      setAvailableStocks(
+        stockNames ? stockNames.stocks.map((stock) => stock.name) : []
+      )
     }
     return () => {
       isMounted = false
     }
-  }, [stocksAvailable])
-
-  useEffect(() => {
-    setAvailableStocks(
-      stockNames ? stockNames.stocks.map((stock) => stock.name) : []
-    )
-  }, [stockNames])
+  }, [stockNames, getStocksAndBalance, stocksAvailable])
 
   const onChangeAmount = (event) => {
     setAmount(Number(event.target.value))
@@ -116,8 +105,6 @@ const Buy = ({ history }) => {
 
   return (
     <>
-      {loadingPurchase && <div>Loading...</div>}
-      {loadingStocks && <div>Loading...</div>}
       <form onSubmit={onSubmit}>
         <label htmlFor="amount">Amount:</label>
         <input
@@ -150,6 +137,8 @@ const Buy = ({ history }) => {
         </select>
         <button type="submit">Buy stock</button>
       </form>
+      {loadingPurchase && <div>Loading...</div>}
+      {loadingStocks && <div>Loading...</div>}
       {errorPurchase && <div>{errorPurchase.message}</div>}
       {errorStocks && <div>{errorStocks.message}</div>}
     </>
