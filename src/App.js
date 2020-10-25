@@ -21,7 +21,6 @@ const App = () => {
   const [data, setData] = useState([])
   useSubscription(STOCKS_UPDATED, {
     onSubscriptionData: ({ subscriptionData }) => {
-      // setData(subscriptionData)
       if (Array.isArray(data) && data.length === 0) {
         setData(
           subscriptionData.data.stocksUpdated.map((stock) => ({
