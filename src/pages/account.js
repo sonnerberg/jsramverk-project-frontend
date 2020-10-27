@@ -37,7 +37,7 @@ const Account = () => {
   return (
     <>
       <div>This is where you can see your balance and stocks</div>
-      <div>Account balance: {data && data.balance}</div>
+      <div>Account balance: {data && data.balance.toFixed(2)}</div>
       {data && data.myStocks.length > 0 && <div>Stocks:</div>}
       {data &&
         data.myStocks.map((stock) => (

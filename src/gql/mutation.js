@@ -23,6 +23,7 @@ export const BUY_STOCK = gql`
     myStocks: buyStock(stock: $stock, amount: $amount) {
       name
       amount
+      balance
     }
   }
 `
@@ -32,6 +33,7 @@ export const SELL_STOCK = gql`
     myStocks: sellStock(stock: $stock, amount: $amount) {
       name
       amount
+      balance
     }
   }
 `

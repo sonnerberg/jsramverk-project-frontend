@@ -1,8 +1,9 @@
-import { gql, useApolloClient, useMutation } from '@apollo/client'
+import { useApolloClient, useMutation } from '@apollo/client'
 import React from 'react'
 import { SIGNUP_USER } from './gql/mutation'
 
 import UserForm from './components/UserForm'
+import { IS_LOGGED_IN } from './gql/query'
 
 const Register = ({ history }) => {
   const client = useApolloClient()
@@ -12,15 +13,14 @@ const Register = ({ history }) => {
       localStorage.setItem('jsramverkProjectTradingToken', data.jwt)
 
       client.writeQuery({
-        query: gql`
-          query LoggedIn {
-            isLoggedIn
-          }
-        `,
+        query: IS_LOGGED_IN,
         data: { isLoggedIn: true },
       })
 
       history.push('/')
+    },
+    onError: (err) => {
+      console.error(err.message)
     },
   })
 

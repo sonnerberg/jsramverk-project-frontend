@@ -20,7 +20,7 @@ const Login = ({ history }) => {
       history.push('/')
     },
     onError: (error) => {
-      console.log(error.message)
+      console.error(error.message)
     },
   })
 

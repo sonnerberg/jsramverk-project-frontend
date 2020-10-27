@@ -1,9 +1,4 @@
-import {
-  useApolloClient,
-  useLazyQuery,
-  useMutation,
-  useQuery,
-} from '@apollo/client'
+import { useApolloClient, useLazyQuery, useMutation } from '@apollo/client'
 import { v4 as uuidv4 } from 'uuid'
 import React, { useEffect, useState } from 'react'
 import { SELL_STOCK } from '../gql/mutation'
@@ -17,7 +12,7 @@ const Sell = ({ history }) => {
   const [amount, setAmount] = useState('')
   const [stock, setStock] = useState('')
 
-  const { data: stockNames } = useQuery(MY_STOCKS, {
+  const [getStocks, { data: stockNames }] = useLazyQuery(MY_STOCKS, {
     fetchPolicy: 'cache-only',
   })
 
@@ -26,22 +21,26 @@ const Sell = ({ history }) => {
     {
       onCompleted: (data) => {
         const stocksBefore = client.readQuery({
-          query: MY_STOCKS,
+          query: STOCKS_AND_BALANCE,
         })
 
         const stocksWithoutNewData = stocksBefore.myStocks.filter(
           (stock) => stock.name !== data.myStocks.name
         )
 
-        const updatedStocks = [...stocksWithoutNewData, data.myStocks]
+        const updatedStocks = [
+          ...stocksWithoutNewData,
+          { name: data.myStocks.name, amount: data.myStocks.amount },
+        ]
 
         const updatedStocksFiltered = updatedStocks.filter(
           (stock) => stock.amount !== 0
         )
 
         client.writeQuery({
-          query: MY_STOCKS,
+          query: STOCKS_AND_BALANCE,
           data: {
+            balance: data.myStocks.balance,
             myStocks: updatedStocksFiltered,
           },
         })
@@ -78,6 +77,7 @@ const Sell = ({ history }) => {
     if (isMounted) {
       getStocksAndBalance()
       stocksAvailable()
+      getStocks()
       setAvailableStocks(
         stockNames ? stockNames.myStocks.map((stock) => stock.name) : []
       )
@@ -85,7 +85,7 @@ const Sell = ({ history }) => {
     return () => {
       isMounted = false
     }
-  }, [stockNames, stocksAvailable, getStocksAndBalance])
+  }, [getStocks, stockNames, stocksAvailable, getStocksAndBalance])
 
   const onChangeAmount = (event) => {
     setAmount(Number(event.target.value))
@@ -107,6 +107,14 @@ const Sell = ({ history }) => {
     }
   }
 
+  let selectedStockAmount
+
+  if (stockNames) {
+    selectedStockAmount = stockNames.myStocks
+      .filter((item) => item.name === stock)
+      .map((item) => item.amount)[0]
+  }
+
   return (
     <>
       <form onSubmit={onSubmit}>
@@ -119,7 +127,8 @@ const Sell = ({ history }) => {
           placeholder="amount"
           value={amount}
           min="1"
-          step="0.01"
+          step="1"
+          max={selectedStockAmount}
         />
         <label htmlFor="stock">Stock:</label>
         <select

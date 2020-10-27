@@ -1,21 +1,26 @@
 import React from 'react'
+import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
+import { Graph } from '../components/Graph'
+
+const Flex = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  @media (max-width: 1115px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`
 
 const Home = ({ data }) => {
-  // TODO: render a graph for each item in props.data
   return (
     <>
       <div>This is the home</div>
-      {data &&
-        data.map((stock) => {
-          const name = stock.name
-          const lastValue = stock.values[stock.values.length - 1]
-          return (
-            <div key={uuidv4()}>
-              {name}: {lastValue}
-            </div>
-          )
-        })}
+      <Flex>
+        {data && data.map((stock) => <Graph stock={stock} key={uuidv4()} />)}
+      </Flex>
     </>
   )
 }

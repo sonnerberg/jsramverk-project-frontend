@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { DEPOSIT } from '../gql/mutation'
 import { CHECK_BALANCE } from '../gql/query'
 
-const Deposit = ({ history }) => {
+const Deposit = (props) => {
   const client = useApolloClient()
 
   const [amount, setAmount] = useState('')
@@ -13,6 +13,9 @@ const Deposit = ({ history }) => {
         query: CHECK_BALANCE,
         data,
       })
+    },
+    onError: (error) => {
+      console.error(error)
     },
   })
 
@@ -28,7 +31,7 @@ const Deposit = ({ history }) => {
       },
     })
     setAmount('')
-    history.push('/account')
+    props.history.push('/account')
   }
 
   return (

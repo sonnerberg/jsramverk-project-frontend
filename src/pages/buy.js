@@ -1,15 +1,10 @@
-import {
-  useApolloClient,
-  useLazyQuery,
-  useMutation,
-  useQuery,
-} from '@apollo/client'
+import { useApolloClient, useLazyQuery, useMutation } from '@apollo/client'
 import { v4 as uuidv4 } from 'uuid'
 import React, { useEffect, useState } from 'react'
 import { BUY_STOCK } from '../gql/mutation'
-import { AVAILABLE_STOCKS, MY_STOCKS, STOCKS_AND_BALANCE } from '../gql/query'
+import { AVAILABLE_STOCKS, STOCKS_AND_BALANCE } from '../gql/query'
 
-const Buy = ({ history }) => {
+const Buy = (props) => {
   const client = useApolloClient()
 
   const [availableStocks, setAvailableStocks] = useState([])
@@ -17,7 +12,7 @@ const Buy = ({ history }) => {
   const [amount, setAmount] = useState('')
   const [stock, setStock] = useState('')
 
-  const { data: stockNames } = useQuery(AVAILABLE_STOCKS, {
+  const [getStocks, { data: stockNames }] = useLazyQuery(AVAILABLE_STOCKS, {
     fetchPolicy: 'cache-only',
   })
 
@@ -27,23 +22,27 @@ const Buy = ({ history }) => {
   ] = useMutation(BUY_STOCK, {
     onCompleted: (data) => {
       const stocksBefore = client.readQuery({
-        query: MY_STOCKS,
+        query: STOCKS_AND_BALANCE,
       })
 
       const stocksWithoutNewData = stocksBefore.myStocks.filter(
         (stock) => stock.name !== data.myStocks.name
       )
 
-      const updatedStocks = [...stocksWithoutNewData, data.myStocks]
+      const updatedStocks = [
+        ...stocksWithoutNewData,
+        { name: data.myStocks.name, amount: data.myStocks.amount },
+      ]
 
       client.writeQuery({
-        query: MY_STOCKS,
+        query: STOCKS_AND_BALANCE,
         data: {
+          balance: data.myStocks.balance,
           myStocks: updatedStocks,
         },
       })
 
-      history.push('/account')
+      props.history.push('/account')
     },
     onError: (err) => {
       // TODO: Send to notify component
@@ -63,17 +62,23 @@ const Buy = ({ history }) => {
         data: stockNames,
       })
     },
+    onError: (error) => {
+      console.error(error.message)
+    },
   })
 
   // Get stocks and balance in order to have it in the cache for
   // when the purchase completes
-  const [getStocksAndBalance] = useLazyQuery(STOCKS_AND_BALANCE)
+  const [getStocksAndBalance, { data: stocksAndBalance }] = useLazyQuery(
+    STOCKS_AND_BALANCE
+  )
 
   useEffect(() => {
     let isMounted = true
     if (isMounted) {
       getStocksAndBalance()
       stocksAvailable()
+      getStocks()
       setAvailableStocks(
         stockNames ? stockNames.stocks.map((stock) => stock.name) : []
       )
@@ -81,7 +86,7 @@ const Buy = ({ history }) => {
     return () => {
       isMounted = false
     }
-  }, [stockNames, getStocksAndBalance, stocksAvailable])
+  }, [getStocks, stockNames, getStocksAndBalance, stocksAvailable])
 
   const onChangeAmount = (event) => {
     setAmount(Number(event.target.value))
@@ -103,6 +108,17 @@ const Buy = ({ history }) => {
     }
   }
 
+  let totalPrice
+  let priceNow
+
+  if (props.lastData) {
+    priceNow = props.lastData.filter((item) => item.name === stock)
+    if (Array.isArray(priceNow) && priceNow.length > 0) {
+      priceNow = priceNow[0].price
+      totalPrice = priceNow * amount
+    }
+  }
+
   return (
     <>
       <form onSubmit={onSubmit}>
@@ -115,7 +131,7 @@ const Buy = ({ history }) => {
           placeholder="amount"
           value={amount}
           min="1"
-          step="0.01"
+          step="1"
         />
         <label htmlFor="stock">Stock:</label>
         <select
@@ -135,8 +151,28 @@ const Buy = ({ history }) => {
             </option>
           ))}
         </select>
-        <button type="submit">Buy stock</button>
+        <button
+          type="submit"
+          disabled={
+            stocksAndBalance ? totalPrice > stocksAndBalance.balance : false
+          }
+        >
+          Buy stock
+        </button>
       </form>
+      {props.lastData
+        .filter((data) => data.name === stock)
+        .map((stock) => {
+          totalPrice = (stock.price * 1000000 * amount) / 1000000
+          return (
+            <div key={uuidv4()}>
+              <div>
+                Price: {stock.price} per {stock.name}.
+              </div>
+              <div>Total price: {totalPrice}</div>
+            </div>
+          )
+        })}
       {loadingPurchase && <div>Loading...</div>}
       {loadingStocks && <div>Loading...</div>}
       {errorPurchase && <div>{errorPurchase.message}</div>}

@@ -1,23 +1,21 @@
-import { gql, useQuery } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import React, { useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-
-const GET_USERS = gql`
-  query get_users {
-    users {
-      username
-      email
-      avatar
-    }
-  }
-`
+import { GET_USERS } from '../gql/query'
 
 const Users = () => {
-  const { data, loading, error, refetch } = useQuery(GET_USERS)
+  // TODO: Use useLazyQuery instead
+  const [fetchUsers, { data, loading, error }] = useLazyQuery(GET_USERS)
 
   useEffect(() => {
-    refetch()
-  }, [refetch])
+    let mounted = true
+    if (mounted) {
+      fetchUsers()
+    }
+    return () => {
+      mounted = false
+    }
+  }, [fetchUsers])
 
   if (loading)
     return (
@@ -36,20 +34,20 @@ const Users = () => {
   return (
     <>
       <div>This is where you can see statistics of registered users</div>
-      {data.users.length === 0 && <p>no users registered</p>}
-      {data.users.map((user) => (
-        <React.Fragment key={uuidv4()}>
-          <div>
-            <img
-              src={user.avatar}
-              alt={`${user.username} avatar`}
-              height="50px"
-            />
-            <p>Username: {user.username}</p>
-            <p>Email: {user.email}</p>
-          </div>
-        </React.Fragment>
-      ))}
+      {data && data.users.length === 0 && <p>no users registered</p>}
+      {data &&
+        data.users.map((user) => (
+          <React.Fragment key={uuidv4()}>
+            <div>
+              <img
+                src={user.avatar}
+                alt={`${user.username} avatar`}
+                height="50px"
+              />
+              <p>Username: {user.username}</p>
+            </div>
+          </React.Fragment>
+        ))}
     </>
   )
 }

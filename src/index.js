@@ -34,7 +34,17 @@ const httpLink = new HttpLink({
   uri,
 })
 
-const cache = new InMemoryCache()
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        myStocks: {
+          merge: false,
+        },
+      },
+    },
+  },
+})
 
 const wsLink = new WebSocketLink({
   uri: 'ws://localhost:4000/subscription',

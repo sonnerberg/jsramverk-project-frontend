@@ -43,3 +43,12 @@ export const AVAILABLE_STOCKS = gql`
     }
   }
 `
+
+export const GET_USERS = gql`
+  query get_users {
+    users {
+      username
+      avatar
+    }
+  }
+`

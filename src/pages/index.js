@@ -1,4 +1,4 @@
-import { useApolloClient } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import React from 'react'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import Layout from '../components/Layout'
@@ -18,12 +18,12 @@ const Pages = (props) => {
       <Router>
         <Layout>
           <Route exact path="/">
-            <Home data={props.data} />
+            <Home data={props.data} maxDataPoints={props.numberOfGraphPoints} />
           </Route>
           <Route path="/users" component={Users} />
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
-          <PrivateRoute path="/buy" component={Buy} />
+          <PrivateRoute path="/buy" lastData={props.lastData} component={Buy} />
           <PrivateRoute path="/sell" component={Sell} />
           <PrivateRoute path="/account" component={Account} />
           <PrivateRoute path="/deposit" component={Deposit} />
@@ -34,21 +34,24 @@ const Pages = (props) => {
 }
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const client = useApolloClient()
-
-  const { isLoggedIn } = client.readQuery({
-    query: IS_LOGGED_IN,
+  const { data, loading, error } = useQuery(IS_LOGGED_IN, {
+    fetchPolicy: 'cache-only',
   })
+  if (loading) return <p>Loading...</p>
+  if (error) return <p>Error!</p>
 
   return (
     <Route
       {...rest}
       render={(props) =>
-        isLoggedIn ? (
-          <Component {...props} />
+        data.isLoggedIn === true ? (
+          <Component {...props} {...rest} />
         ) : (
           <Redirect
-            to={{ pathname: '/register', state: { from: props.location } }}
+            to={{
+              pathname: '/signin',
+              state: { from: props.location },
+            }}
           />
         )
       }
