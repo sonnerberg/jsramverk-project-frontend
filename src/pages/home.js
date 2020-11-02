@@ -17,7 +17,6 @@ const Flex = styled.div`
 const Home = ({ data }) => {
   return (
     <>
-      <div>This is the home</div>
       <Flex>
         {data && data.map((stock) => <Graph stock={stock} key={uuidv4()} />)}
       </Flex>

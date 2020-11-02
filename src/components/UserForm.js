@@ -1,4 +1,12 @@
 import React, { useState } from 'react'
+import styled from 'styled-components'
+import Button from './Button'
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
 const UserForm = ({ formType, action }) => {
   const [values, setValues] = useState()
@@ -22,7 +30,7 @@ const UserForm = ({ formType, action }) => {
   return (
     <>
       {formType === 'register' ? <h2>Sign up</h2> : <h2>Sign in</h2>}
-      <form onSubmit={onSubmit}>
+      <Form onSubmit={onSubmit}>
         {formType === 'register' && (
           <>
             <label htmlFor="username">Username:</label>
@@ -51,8 +59,8 @@ const UserForm = ({ formType, action }) => {
           placeholder="password"
           onChange={onChange}
         />
-        <button type="submit">Submit</button>
-      </form>
+        <Button type="submit">Submit</Button>
+      </Form>
     </>
   )
 }

@@ -6,6 +6,8 @@ import Pages from './pages'
 import { useApolloClient, useLazyQuery, useSubscription } from '@apollo/client'
 import { PERSON_ADDED, STOCKS_UPDATED } from './gql/subscription'
 import { GET_USERS } from './gql/query'
+import { ThemeProvider } from 'styled-components'
+import { theme } from './theme'
 
 const App = () => {
   const [data, setData] = useState([])
@@ -90,14 +92,14 @@ const App = () => {
   // TODO: Make hamburger: https://css-tricks.com/hamburger-menu-with-a-side-of-react-hooks-and-styled-components/
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <GlobalStyle />
       <Pages
         data={data}
         numberOfGraphPoints={maxArraySize}
         lastData={lastData}
       />
-    </>
+    </ThemeProvider>
   )
 }
 

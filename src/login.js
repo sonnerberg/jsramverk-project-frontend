@@ -4,6 +4,14 @@ import { SIGNIN_USER } from './gql/mutation'
 
 import UserForm from './components/UserForm'
 import { IS_LOGGED_IN } from './gql/query'
+import styled from 'styled-components'
+import Spinner from './components/Spinner'
+
+const StyledLogin = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
 const Login = ({ history }) => {
   const client = useApolloClient()
@@ -25,11 +33,11 @@ const Login = ({ history }) => {
   })
 
   return (
-    <>
+    <StyledLogin>
       <UserForm action={signIn} formType="login" />
-      {loading && <p>Loading...</p>}
+      {loading && <Spinner />}
       {error && <p>Error signing in!</p>}
-    </>
+    </StyledLogin>
   )
 }
 

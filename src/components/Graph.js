@@ -14,12 +14,16 @@ const Svg = styled.svg`
   width: 100%;
   margin-left: '1rem';
   overflow: visible;
+
+  & .path {
+    stroke: ${({ theme }) => theme.primaryLight};
+  }
 `
 
 const Div = styled.div`
   margin: 1rem;
   margin-right: 2.5rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 4.5rem;
   max-width: 500px;
 `
 
@@ -60,14 +64,14 @@ export const Graph = ({ stock, numberOfGraphPoints }) => {
 
     const xScale = scaleLinear()
       .domain([0, values.length < xDomain ? xDomain - 1 : values.length - 1])
-      .range([0, dimensions.width]) // change
+      .range([0, dimensions.width])
 
     const yScale = scaleLinear()
       .domain([Math.min(...values) - 10, Math.max(...values) + 10])
-      .range([dimensions.height, 0]) // change
+      .range([dimensions.height, 0])
 
     const xAxis = axisBottom(xScale).ticks(5)
-    // .tickFormat((index) => index + 1)
+
     svg
       .select('.x-axis')
       .style('transform', `translateY(${dimensions.height}px)`)

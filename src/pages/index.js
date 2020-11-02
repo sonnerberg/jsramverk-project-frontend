@@ -11,6 +11,7 @@ import Deposit from './deposit'
 import Home from './home'
 import Sell from './sell'
 import Users from './users'
+import Spinner from '../components/Spinner'
 
 const Pages = (props) => {
   return (
@@ -37,7 +38,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   const { data, loading, error } = useQuery(IS_LOGGED_IN, {
     fetchPolicy: 'cache-only',
   })
-  if (loading) return <p>Loading...</p>
+  if (loading) return <Spinner />
   if (error) return <p>Error!</p>
 
   return (

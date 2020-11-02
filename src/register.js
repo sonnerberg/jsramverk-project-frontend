@@ -1,6 +1,7 @@
 import { useApolloClient, useMutation } from '@apollo/client'
 import React from 'react'
 import { SIGNUP_USER } from './gql/mutation'
+import Spinner from './components/Spinner'
 
 import UserForm from './components/UserForm'
 import { IS_LOGGED_IN } from './gql/query'
@@ -27,7 +28,7 @@ const Register = ({ history }) => {
   return (
     <>
       <UserForm action={signUp} formType="register" />
-      {loading && <p>Loading...</p>}
+      {loading && <Spinner />}
       {error && <p>Error creating account!</p>}
     </>
   )

@@ -2,6 +2,14 @@ import { useLazyQuery } from '@apollo/client'
 import React, { useEffect } from 'react'
 import { STOCKS_AND_BALANCE } from '../gql/query'
 import { v4 as uuidv4 } from 'uuid'
+import Spinner from '../components/Spinner'
+import styled from 'styled-components'
+
+const Flex = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
 const Account = () => {
   const [getStocksAndBalance, { data, loading, error }] = useLazyQuery(
@@ -23,7 +31,7 @@ const Account = () => {
   if (loading)
     return (
       <>
-        <p>Loading...</p>
+        <Spinner />
       </>
     )
 
@@ -35,10 +43,10 @@ const Account = () => {
     )
 
   return (
-    <>
-      <div>This is where you can see your balance and stocks</div>
+    <Flex>
+      <h2>Balance and stocks</h2>
       <div>Account balance: {data && data.balance.toFixed(2)}</div>
-      {data && data.myStocks.length > 0 && <div>Stocks:</div>}
+      {data && data.myStocks.length > 0 && <h3>Stocks:</h3>}
       {data &&
         data.myStocks.map((stock) => (
           <div key={uuidv4()}>
@@ -46,7 +54,7 @@ const Account = () => {
             <p>Amount: {stock.amount}</p>
           </div>
         ))}
-    </>
+    </Flex>
   )
 }
 

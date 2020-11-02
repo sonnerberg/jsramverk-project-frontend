@@ -3,6 +3,21 @@ import { v4 as uuidv4 } from 'uuid'
 import React, { useEffect, useState } from 'react'
 import { BUY_STOCK } from '../gql/mutation'
 import { AVAILABLE_STOCKS, STOCKS_AND_BALANCE } from '../gql/query'
+import Spinner from '../components/Spinner'
+import styled from 'styled-components'
+import Button from '../components/Button'
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+const Flex = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
 const Buy = (props) => {
   const client = useApolloClient()
@@ -121,18 +136,7 @@ const Buy = (props) => {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
-        <label htmlFor="amount">Amount:</label>
-        <input
-          type="number"
-          name="amount"
-          required="required"
-          onChange={onChangeAmount}
-          placeholder="amount"
-          value={amount}
-          min="1"
-          step="1"
-        />
+      <Form onSubmit={onSubmit}>
         <label htmlFor="stock">Stock:</label>
         <select
           value={stock}
@@ -151,30 +155,41 @@ const Buy = (props) => {
             </option>
           ))}
         </select>
-        <button
+        <label htmlFor="amount">Amount:</label>
+        <input
+          type="number"
+          name="amount"
+          required="required"
+          onChange={onChangeAmount}
+          placeholder="amount"
+          value={amount}
+          min="1"
+          step="1"
+        />
+        <Button
           type="submit"
           disabled={
             stocksAndBalance ? totalPrice > stocksAndBalance.balance : false
           }
         >
           Buy stock
-        </button>
-      </form>
+        </Button>
+      </Form>
       {props.lastData
         .filter((data) => data.name === stock)
         .map((stock) => {
           totalPrice = (stock.price * 1000000 * amount) / 1000000
           return (
-            <div key={uuidv4()}>
+            <Flex key={uuidv4()}>
               <div>
                 Price: {stock.price} per {stock.name}.
               </div>
               <div>Total price: {totalPrice}</div>
-            </div>
+            </Flex>
           )
         })}
-      {loadingPurchase && <div>Loading...</div>}
-      {loadingStocks && <div>Loading...</div>}
+      {loadingPurchase && <Spinner />}
+      {loadingStocks && <Spinner />}
       {errorPurchase && <div>{errorPurchase.message}</div>}
       {errorStocks && <div>{errorStocks.message}</div>}
     </>

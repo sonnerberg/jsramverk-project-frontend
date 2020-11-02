@@ -2,6 +2,14 @@ import { useApolloClient, useMutation } from '@apollo/client'
 import React, { useState } from 'react'
 import { DEPOSIT } from '../gql/mutation'
 import { CHECK_BALANCE } from '../gql/query'
+import Spinner from '../components/Spinner'
+import styled from 'styled-components'
+import Button from '../components/Button'
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
 const Deposit = (props) => {
   const client = useApolloClient()
@@ -36,7 +44,7 @@ const Deposit = (props) => {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
+      <Form onSubmit={onSubmit}>
         <label htmlFor="amount">Amount:</label>
         <input
           type="number"
@@ -47,9 +55,9 @@ const Deposit = (props) => {
           value={amount}
           min="1"
         />
-        <button type="submit">Deposit</button>
-      </form>
-      {loading && <p>Loading...</p>}
+        <Button type="submit">Deposit</Button>
+      </Form>
+      {loading && <Spinner />}
       {error && <p>Error depositing!</p>}
     </>
   )

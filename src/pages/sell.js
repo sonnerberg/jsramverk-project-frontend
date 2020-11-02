@@ -3,6 +3,14 @@ import { v4 as uuidv4 } from 'uuid'
 import React, { useEffect, useState } from 'react'
 import { SELL_STOCK } from '../gql/mutation'
 import { MY_STOCKS, STOCKS_AND_BALANCE } from '../gql/query'
+import Spinner from '../components/Spinner'
+import styled from 'styled-components'
+import Button from '../components/Button'
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
 const Sell = ({ history }) => {
   const client = useApolloClient()
@@ -117,19 +125,7 @@ const Sell = ({ history }) => {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
-        <label htmlFor="amount">Amount:</label>
-        <input
-          type="number"
-          name="amount"
-          required="required"
-          onChange={onChangeAmount}
-          placeholder="amount"
-          value={amount}
-          min="1"
-          step="1"
-          max={selectedStockAmount}
-        />
+      <Form onSubmit={onSubmit}>
         <label htmlFor="stock">Stock:</label>
         <select
           value={stock}
@@ -148,10 +144,22 @@ const Sell = ({ history }) => {
             </option>
           ))}
         </select>
-        <button type="submit">Sell stock</button>
-      </form>
-      {loadingSale && <div>Loading...</div>}
-      {loadingStocks && <div>Loading...</div>}
+        <label htmlFor="amount">Amount:</label>
+        <input
+          type="number"
+          name="amount"
+          required="required"
+          onChange={onChangeAmount}
+          placeholder="amount"
+          value={amount}
+          min="1"
+          step="1"
+          max={selectedStockAmount}
+        />
+        <Button type="submit">Sell stock</Button>
+      </Form>
+      {loadingSale && <Spinner />}
+      {loadingStocks && <Spinner />}
       {errorSale && <div>{errorSale.message}</div>}
       {errorStocks && <div>{errorStocks.message}</div>}
     </>

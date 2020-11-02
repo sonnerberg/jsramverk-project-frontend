@@ -5,3 +5,5 @@
 - [The Muratorium - Using React (Hooks) with D3](https://www.youtube.com/playlist?list=PLDZ4p-ENjbiPo4WH7KdHjh_EMI7Ic8b2B)
 
 - [Fullstackopen - Part 8 (GrahpQL)](https://fullstackopen.com/en/part8)
+
+- [Freecodecamp](https://www.freecodecamp.org/news/how-to-keep-your-footer-where-it-belongs-59c6aa05c59c/)
