@@ -57,6 +57,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.5",
     "istanbul-lib-coverage": "^3.0.0",
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
+    "pm2": "^4.5.0"
   }
 }

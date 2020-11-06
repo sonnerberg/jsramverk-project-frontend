@@ -8,6 +8,8 @@ build:
       tests:
         override: [js-scrutinizer-run]
     coverage:
+      services:
+        mongo: 4.4.1
       tests:
         before:
           - command: 'git clone https://github.com/sonnerberg/jsramverk-project-backend backend'
