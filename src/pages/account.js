@@ -45,13 +45,19 @@ const Account = () => {
   return (
     <Flex>
       <h2>Balance and stocks</h2>
-      <div>Account balance: {data && data.balance.toFixed(2)}</div>
+      <div>
+        Account balance: {data && <span>{data.balance.toFixed(2)}</span>}
+      </div>
       {data && data.myStocks.length > 0 && <h3>Stocks:</h3>}
       {data &&
         data.myStocks.map((stock) => (
           <div key={uuidv4()}>
-            <p>Name: {stock.name}</p>
-            <p>Amount: {stock.amount}</p>
+            <p>
+              Name: <span>{stock.name}</span>
+            </p>
+            <p>
+              Amount: <span>{stock.amount}</span>
+            </p>
           </div>
         ))}
     </Flex>

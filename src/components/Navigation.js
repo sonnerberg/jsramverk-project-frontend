@@ -29,7 +29,7 @@ const Navigation = ({ setOpen }) => {
   })
 
   const closeMenu = () => {
-    setOpen(false)
+    if (setOpen) setOpen(false)
   }
 
   if (loading)
@@ -57,12 +57,7 @@ const Navigation = ({ setOpen }) => {
           }}
         >
           <Li>
-            <Link
-              to="/"
-              onClick={() => {
-                if (setOpen) closeMenu()
-              }}
-            >
+            <Link to="/" onClick={closeMenu}>
               <span aria-hidden="true" role="img">
                 📈
               </span>
@@ -70,12 +65,7 @@ const Navigation = ({ setOpen }) => {
             </Link>
           </Li>
           <Li>
-            <Link
-              to="/users"
-              onClick={() => {
-                if (setOpen) closeMenu()
-              }}
-            >
+            <Link to="/users" onClick={closeMenu}>
               <span aria-hidden="true" role="img">
                 👥
               </span>
@@ -85,12 +75,7 @@ const Navigation = ({ setOpen }) => {
           {data && data.isLoggedIn && (
             <>
               <Li>
-                <Link
-                  to="/buy"
-                  onClick={() => {
-                    if (setOpen) closeMenu()
-                  }}
-                >
+                <Link to="/buy" onClick={closeMenu}>
                   <span aria-hidden="true" role="img">
                     💸
                   </span>
@@ -98,12 +83,7 @@ const Navigation = ({ setOpen }) => {
                 </Link>
               </Li>
               <Li>
-                <Link
-                  to="/sell"
-                  onClick={() => {
-                    if (setOpen) closeMenu()
-                  }}
-                >
+                <Link to="/sell" onClick={closeMenu}>
                   <span aria-hidden="true" role="img">
                     💵
                   </span>
@@ -111,12 +91,7 @@ const Navigation = ({ setOpen }) => {
                 </Link>
               </Li>
               <Li>
-                <Link
-                  to="/account"
-                  onClick={() => {
-                    if (setOpen) closeMenu()
-                  }}
-                >
+                <Link to="/account" onClick={closeMenu}>
                   <span aria-hidden="true" role="img">
                     🏦
                   </span>
@@ -124,12 +99,7 @@ const Navigation = ({ setOpen }) => {
                 </Link>
               </Li>
               <Li>
-                <Link
-                  to="/deposit"
-                  onClick={() => {
-                    if (setOpen) closeMenu()
-                  }}
-                >
+                <Link to="/deposit" onClick={closeMenu}>
                   <span aria-hidden="true" role="img">
                     💳
                   </span>
