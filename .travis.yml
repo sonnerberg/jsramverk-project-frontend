@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+  - 14
+  - 13
+  - 12
+  - 11
+  - 10
+before_install:
+  - git clone https://github.com/sonnerberg/jsramverk-project-backend backend
+  - npm install
+  - npm install --prefix backend
+before_script:
+  - npm run start:test --prefix backend &
+  - ./node_modules/.bin/pm2 --name me-app start npm -- start
+script:
+  - npm test
