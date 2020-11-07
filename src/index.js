@@ -52,7 +52,7 @@ const cache = new InMemoryCache({
 const wsLink = new WebSocketLink({
   uri:
     process.env.NODE_ENV === 'production'
-      ? 'ws://trading-api.sonnerberg.me/subscription'
+      ? 'wss://trading-api.sonnerberg.me/subscription'
       : 'ws://localhost:4000/subscription',
   options: {
     reconnect: true,
