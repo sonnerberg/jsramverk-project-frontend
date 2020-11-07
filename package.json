@@ -28,7 +28,8 @@
     "test:react-scripts": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "deploy": "npm run build && rsync -av build/ digitalocean:/var/www/trading.sonnerberg.me/html/"
   },
   "eslintConfig": {
     "extends": "react-app"
