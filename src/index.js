@@ -28,7 +28,10 @@ const authLink = setContext((_, { headers }) => {
   return { headers }
 })
 
-const uri = 'http://localhost:4000/api'
+const uri =
+  process.env.NODE_ENV === 'production'
+    ? 'https://trading-api.sonnerberg.me/api'
+    : 'http://localhost:4000/api'
 
 const httpLink = new HttpLink({
   uri,
@@ -47,7 +50,10 @@ const cache = new InMemoryCache({
 })
 
 const wsLink = new WebSocketLink({
-  uri: 'ws://localhost:4000/subscription',
+  uri:
+    process.env.NODE_ENV === 'production'
+      ? 'ws://trading-api.sonnerberg.me/subscription'
+      : 'ws://localhost:4000/subscription',
   options: {
     reconnect: true,
   },
