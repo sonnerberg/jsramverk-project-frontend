@@ -1,3 +1,5 @@
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sonnerberg/jsramverk-project-frontend/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/sonnerberg/jsramverk-project-frontend/?branch=main) [![Code Coverage](https://scrutinizer-ci.com/g/sonnerberg/jsramverk-project-frontend/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/sonnerberg/jsramverk-project-frontend/?branch=main) [![Build Status](https://scrutinizer-ci.com/g/sonnerberg/jsramverk-project-frontend/badges/build.png?b=main)](https://scrutinizer-ci.com/g/sonnerberg/jsramverk-project-frontend/build-status/main) [![Build Status](https://travis-ci.com/sonnerberg/jsramverk-project-frontend.svg?branch=main)](https://travis-ci.com/sonnerberg/jsramverk-project-frontend)
+
 ## Attribution
 
 - “JavaScript Everywhere by Adam D. Scott (O’Reilly). Copyright 2020 Adam D. Scott, 978-1-492-04698-1.”
