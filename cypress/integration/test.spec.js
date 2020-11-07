@@ -137,10 +137,11 @@ describe('Test the app', () => {
     cy.url().should('eq', `${Cypress.config().baseUrl}deposit`)
   })
 
-  it('buys stocks', () => {
+  it('buys and sells stocks', () => {
     cy.visit('/login')
     cy.url().should('eq', `${Cypress.config().baseUrl}login`)
     cy.login(email, password)
+    cy.wait(500)
     cy.visit('/deposit')
     cy.url().should('eq', `${Cypress.config().baseUrl}deposit`)
     cy.get('input').type('99999999').type('{enter}')
@@ -169,12 +170,6 @@ describe('Test the app', () => {
     cy.get('input').type('1').type('{enter}')
     cy.url().should('eq', `${Cypress.config().baseUrl}account`)
     cy.get(stocksInAccount).should('have.length', 5)
-  })
-
-  it('sell stocks', () => {
-    cy.visit('/login')
-    cy.url().should('eq', `${Cypress.config().baseUrl}login`)
-    cy.login(email, password)
     cy.visit('/sell')
     cy.get('#stock').select('Kanelbulle')
     cy.get('input').type('1').type('{enter}')
