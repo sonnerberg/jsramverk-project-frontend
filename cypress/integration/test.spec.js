@@ -2,23 +2,16 @@ beforeEach(() => {
   cy.visit('/')
 })
 
-describe('Visit links', () => {
-  const home = '.sc-jrsJCI > nav > .sc-eCApGN > :nth-child(1) > a'
-  const users = '.sc-jrsJCI > nav > .sc-eCApGN > :nth-child(2) > a'
-  const buyStocks = '.sc-jrsJCI > nav > .sc-eCApGN > :nth-child(3) > a'
-  const sellStocks = '.sc-jrsJCI > nav > .sc-eCApGN > :nth-child(4) > a'
-  const account = '.sc-jrsJCI > nav > .sc-eCApGN > :nth-child(5) > a'
-  const deposit = '.sc-jrsJCI > nav > .sc-eCApGN > :nth-child(6) > a'
-  const homeHamburger = '.sc-jSFkmK > nav > .sc-eCApGN > :nth-child(1) > a'
-  const usersHamburger = '.sc-jSFkmK > nav > .sc-eCApGN > :nth-child(2) > a'
-  const buyStocksHamburger = '.sc-jSFkmK > nav > .sc-eCApGN > :nth-child(3) > a'
-  const sellStocksHamburger =
-    '.sc-jSFkmK > nav > .sc-eCApGN > :nth-child(4) > a'
-  const accountHamburger = '.sc-jSFkmK > nav > .sc-eCApGN > :nth-child(5) > a'
-  const depositHamburger = '.sc-jSFkmK > nav > .sc-eCApGN > :nth-child(6) > a'
+describe('Test the app', () => {
+  const home = '.homeLink'
+  const users = '.usersLink'
+  const buyStocks = '.buyLink'
+  const sellStocks = '.sellLink'
+  const account = '.accountLink'
+  const deposit = '.depositLink'
   const login = '[href="/login"]'
-  const logout = '.sc-iCoHVE'
-  const hamburger = '.sc-bdnylx'
+  const logout = '#logout'
+  const hamburger = '#burger'
   const register = '[href="/register"]'
   const username = 'richard'
   const email = 'pene14@student.bth.se'
@@ -28,14 +21,14 @@ describe('Visit links', () => {
   const stocksInAccount = '#root > div > div.wrapper > main > div div'
 
   it('has two links in navigation bar', () => {
-    cy.get('#root > div > div.sc-jrsJCI.giNSyX > nav > ul > li').should(
+    cy.get('#root > div > div > nav > ul > li').should(
       'have.length',
       numberOfLinksWhenNotLoggedIn
     )
   })
 
   it('has no users registered', () => {
-    cy.get(users).click()
+    cy.get(users).click({ multiple: true, force: true })
     cy.url().should('eq', `${Cypress.config().baseUrl}users`)
     cy.get('main > p').should('contain', 'no users registered')
   })
@@ -73,14 +66,14 @@ describe('Visit links', () => {
     cy.get(login).click()
     cy.login(email, password)
     cy.url().should('eq', Cypress.config().baseUrl)
-    cy.get('#root > div > div.sc-jrsJCI.giNSyX > nav > ul > li').should(
+    cy.get('#root > div > div > nav > ul > li').should(
       'have.length',
       numberOfLinksWhenLoggedIn
     )
   })
 
   it('has one user registered', () => {
-    cy.get(users).click()
+    cy.get(users).click({ multiple: true, force: true })
     cy.url().should('eq', `${Cypress.config().baseUrl}users`)
     cy.get('main > div').should('have.length', 1)
   })
@@ -92,7 +85,7 @@ describe('Visit links', () => {
   })
 
   it('has two users registered', () => {
-    cy.get(users).click()
+    cy.get(users).click({ multiple: true, force: true })
     cy.url().should('eq', `${Cypress.config().baseUrl}users`)
     cy.get('main > div').should('have.length', 2)
   })
@@ -125,22 +118,22 @@ describe('Visit links', () => {
     cy.login(email, password)
     cy.url().should('eq', Cypress.config().baseUrl)
     cy.get(hamburger).click()
-    cy.get(homeHamburger).click()
+    cy.get(home).click({ multiple: true, force: true })
     cy.url().should('eq', Cypress.config().baseUrl)
     cy.get(hamburger).click()
-    cy.get(usersHamburger).click()
+    cy.get(users).click({ multiple: true, force: true })
     cy.url().should('eq', `${Cypress.config().baseUrl}users`)
     cy.get(hamburger).click()
-    cy.get(buyStocksHamburger).click()
+    cy.get(buyStocks).click({ multiple: true, force: true })
     cy.url().should('eq', `${Cypress.config().baseUrl}buy`)
     cy.get(hamburger).click()
-    cy.get(sellStocksHamburger).click()
+    cy.get(sellStocks).click({ multiple: true, force: true })
     cy.url().should('eq', `${Cypress.config().baseUrl}sell`)
     cy.get(hamburger).click()
-    cy.get(accountHamburger).click()
+    cy.get(account).click({ multiple: true, force: true })
     cy.url().should('eq', `${Cypress.config().baseUrl}account`)
     cy.get(hamburger).click()
-    cy.get(depositHamburger).click()
+    cy.get(deposit).click({ multiple: true, force: true })
     cy.url().should('eq', `${Cypress.config().baseUrl}deposit`)
   })
 
@@ -176,6 +169,12 @@ describe('Visit links', () => {
     cy.get('input').type('1').type('{enter}')
     cy.url().should('eq', `${Cypress.config().baseUrl}account`)
     cy.get(stocksInAccount).should('have.length', 5)
+  })
+
+  it('sell stocks', () => {
+    cy.visit('/login')
+    cy.url().should('eq', `${Cypress.config().baseUrl}login`)
+    cy.login(email, password)
     cy.visit('/sell')
     cy.get('#stock').select('Kanelbulle')
     cy.get('input').type('1').type('{enter}')

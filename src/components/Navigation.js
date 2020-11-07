@@ -57,7 +57,7 @@ const Navigation = ({ setOpen }) => {
           }}
         >
           <Li>
-            <Link to="/" onClick={closeMenu}>
+            <Link to="/" onClick={closeMenu} className="homeLink">
               <span aria-hidden="true" role="img">
                 📈
               </span>
@@ -65,7 +65,7 @@ const Navigation = ({ setOpen }) => {
             </Link>
           </Li>
           <Li>
-            <Link to="/users" onClick={closeMenu}>
+            <Link to="/users" onClick={closeMenu} className="usersLink">
               <span aria-hidden="true" role="img">
                 👥
               </span>
@@ -75,7 +75,7 @@ const Navigation = ({ setOpen }) => {
           {data && data.isLoggedIn && (
             <>
               <Li>
-                <Link to="/buy" onClick={closeMenu}>
+                <Link to="/buy" onClick={closeMenu} className="buyLink">
                   <span aria-hidden="true" role="img">
                     💸
                   </span>
@@ -83,7 +83,7 @@ const Navigation = ({ setOpen }) => {
                 </Link>
               </Li>
               <Li>
-                <Link to="/sell" onClick={closeMenu}>
+                <Link to="/sell" onClick={closeMenu} className="sellLink">
                   <span aria-hidden="true" role="img">
                     💵
                   </span>
@@ -91,7 +91,7 @@ const Navigation = ({ setOpen }) => {
                 </Link>
               </Li>
               <Li>
-                <Link to="/account" onClick={closeMenu}>
+                <Link to="/account" onClick={closeMenu} className="accountLink">
                   <span aria-hidden="true" role="img">
                     🏦
                   </span>
@@ -99,7 +99,7 @@ const Navigation = ({ setOpen }) => {
                 </Link>
               </Li>
               <Li>
-                <Link to="/deposit" onClick={closeMenu}>
+                <Link to="/deposit" onClick={closeMenu} className="depositLink">
                   <span aria-hidden="true" role="img">
                     💳
                   </span>

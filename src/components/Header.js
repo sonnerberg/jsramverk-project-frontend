@@ -58,6 +58,7 @@ const Header = ({ history }) => {
         {data && data.isLoggedIn ? (
           <>
             <Button
+              id="logout"
               onClick={() => {
                 localStorage.removeItem('jsramverkProjectTradingToken')
 
