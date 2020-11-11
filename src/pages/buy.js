@@ -103,6 +103,10 @@ const Buy = (props) => {
     }
   }, [getStocks, stockNames, getStocksAndBalance, stocksAvailable])
 
+  useEffect(() => {
+    document.title = 'Buy stocks'
+  }, [])
+
   const onChangeAmount = (event) => {
     setAmount(Number(event.target.value))
   }

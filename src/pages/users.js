@@ -29,6 +29,10 @@ const Users = () => {
   const [fetchUsers, { data, loading, error }] = useLazyQuery(GET_USERS)
 
   useEffect(() => {
+    document.title = 'Users'
+  }, [])
+
+  useEffect(() => {
     let mounted = true
     if (mounted) {
       fetchUsers()

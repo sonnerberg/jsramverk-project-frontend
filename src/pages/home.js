@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 import { Graph } from '../components/Graph'
@@ -15,6 +15,10 @@ const Flex = styled.div`
 `
 
 const Home = ({ data }) => {
+  useEffect(() => {
+    document.title = 'Home'
+  }, [])
+
   return (
     <>
       <Flex>

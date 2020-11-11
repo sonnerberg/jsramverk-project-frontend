@@ -13,6 +13,9 @@ const Form = styled.form`
 `
 
 const Sell = ({ history }) => {
+  useEffect(() => {
+    document.title = 'Sell stocks'
+  }, [])
   const client = useApolloClient()
 
   const [availableStocks, setAvailableStocks] = useState([])

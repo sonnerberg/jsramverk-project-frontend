@@ -1,5 +1,5 @@
 import { useApolloClient, useMutation } from '@apollo/client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { DEPOSIT } from '../gql/mutation'
 import { CHECK_BALANCE } from '../gql/query'
 import Spinner from '../components/Spinner'
@@ -13,6 +13,10 @@ const Form = styled.form`
 
 const Deposit = (props) => {
   const client = useApolloClient()
+
+  useEffect(() => {
+    document.title = 'Deposit'
+  }, [])
 
   const [amount, setAmount] = useState('')
   const [deposit, { loading, error }] = useMutation(DEPOSIT, {

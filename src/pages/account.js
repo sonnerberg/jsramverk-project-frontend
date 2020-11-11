@@ -28,6 +28,10 @@ const Account = () => {
     }
   }, [getStocksAndBalance])
 
+  useEffect(() => {
+    document.title = 'Account'
+  }, [])
+
   if (loading)
     return (
       <>
